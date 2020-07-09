@@ -1,18 +1,16 @@
 # Packages in Python and PyPI 
-link: https://www.youtube.com/watch?v=GIF3LaRqgXo
+Based on link: https://www.youtube.com/watch?v=GIF3LaRqgXo
 
+## Some setup notes
 ```
-general discussion about packaging issues...
-python packaging tends to be cumbersome
-publish your code to make python 
-prefer pure python
-
+You will want to git init 
+You will want to virtualenv env
 ```
 
-## make a package
+## Make a package
 
 ```
-start with some usefull code:
+Create example code src/helloworld.py
 
 def say_hello(name=None):
   if name is None:
@@ -20,17 +18,7 @@ def say_hello(name=None):
   else:
     return f"Hello, {name}!"
 
-
-helloworld.py # python module
-
-Put this in a src directory
-
-setup.py
-src
- |--- helloworld.py
-
-
-whats in setup.py?
+Add a ./setup.py:
 
 from setuptools import setup
 
@@ -42,15 +30,20 @@ setup(
   package_dir={'': 'src'},
 )
 
-Note: distutils is not as good as setuptools, and setuptools is included in pip
 Notes:
   name : this is what you pip install
   version: 0.0.x implies unstable
   py_modules: list of modules imported
 
+Gives us:
+
+setup.py
+src
+ |--- helloworld.py
+
 ```
 
-## build the package
+## Build the package
 ```
 $ python setup.py bdist_wheel
 
@@ -58,7 +51,7 @@ Note that: copying src/helloworld.py --> build/lib
 
 It will create dist/helloworld-0.0.1-py3-non-any.whl
 
-resulting structure:
+Resulting structure:
 
 build
  |-- bdist_macosx-10.11-x86_64   <-- YMMV
@@ -80,10 +73,10 @@ build
 
 
 Notes:
-  .gitignore  bdist_macosx-10.11-x86_64
+  Ignore this:  bdist_macosx-10.11-x86_64
 ```
 
-## install it locally
+## Install it locally
 ```
 $ pip install -e .
 
@@ -92,7 +85,7 @@ Note: -e essentially links to code you are working on
 
 ```
 
-## testing locally
+## Manually testing 
 ```
 $ python
 >>> from helloworld import say_hello
@@ -106,12 +99,11 @@ $ python
 Note: this is a working package
 ```
 
-## housekeeping
+## Housekeeping
 ```
-you can build a .gitignore by using https://www.toptal.com/developers/gitignore
-also need a LICENSE.txt, https://choosealicense.com/
-need to add some classifiers to setup.py file...
-see: https://pypi.org/classifiers for list, apply the usefull ones:
+Need a .gitignore ; can use https://www.toptal.com/developers/gitignore
+Need a LICENSE.txt, https://choosealicense.com/
+Need to add some classifiers to setup.py ; see: https://pypi.org/classifiers for list, apply the usefull ones:
 
 setup(
 ...
@@ -127,27 +119,27 @@ classifiers=[
 Some documentation; either ReStructedText .rst or MarkDown .md
  .rst - Pythonic, Powerful, Can use Sphinx
  .md - more widespread, simpler, can use MkDocs
-```
 
-### Create a README.md file.
 
-  # Hello World
+Create a README.md file.
+
+  Hello World
   
   This is an example project demonstrating how to publish a python module to PyPI
 
   ...
   ## Installation
   Run the following command to install:
-  ```python
-  pip install helloworld
-  ```
-  ...
+  
+    pip install helloworld
+  
   ## Usage
-  ```python
+  
   from helloworld import say_hello
   say_hello()
   say_hello("Everybody")
-  ```
+
+```
 
 ### Add to setup.py
 
@@ -179,7 +171,6 @@ setup(
 ```
 $ pip install -e .
 
-wait - we don't have tests. So...
 ```
 
 #### testing with pytest
@@ -188,7 +179,7 @@ First, lets add dev dependencies to setup.py
 
 setup(
   ...
-  extra_require = {
+  extras_require = {
     "dev": [
       "pytest>=3.7",
     ],
@@ -202,9 +193,7 @@ Update the README.md
 For developers...
 
 To install helloworld, along with the tools you need to develop and run tests, run the following in your virtualenv:
-  ```bash
   $ pip install -e .[dev]
-  ```
 
 Difference is, install_requires should be for production, least specific versions.
 extras_require is for optional for dev/testing - make it more specific.
@@ -240,7 +229,7 @@ warning: check: missing required meta-data: either (author and author_email) or 
 ...
 Creating tar archive
 
-Ok, so add in:
+Add in:
 
 setup(
   ...
@@ -253,16 +242,11 @@ Re-run tests
 Re-run python setup.py sdist
 Have a look at what is inside the tar:
 $ tar tzf dist/helloworld-0.0.1.tar.gz
-...
-@todo
-...
 
 By default, its not including LICENSE.txt or test_helloworld.py
 
-In order to include these missing files:
-
-So, to modify this we need to create a Manifest, which is "fiddly".
-So, use tools:
+In order to include these missing files, a Manifest is needed.
+Use tool:
 
 $ pip install check-manifest  # add to dev deps ?
 $ check-manifest --create
@@ -273,6 +257,7 @@ Have a look at it.
 And rebuild sdist again.
 ```
 
+NOTE: from this point on I have not tested.
 
 ### and publish:
 ```
