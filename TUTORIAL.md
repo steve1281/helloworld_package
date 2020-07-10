@@ -4,7 +4,7 @@ Based on link: https://www.youtube.com/watch?v=GIF3LaRqgXo
 ## Some setup notes
 ```
 You will want to git init 
-You will want to virtualenv env
+You will want to virtualenv env  (or a python3 -m venv env )
 ```
 
 ## Make a package
@@ -45,6 +45,7 @@ src
 
 ## Build the package
 ```
+$ pip install wheel
 $ python setup.py bdist_wheel
 
 Note that: copying src/helloworld.py --> build/lib
