@@ -28,6 +28,11 @@ setup(
       "check-manifest",
     ],
   },
+  entry_points = {
+    "console_scripts" :[
+      "helloworld = helloworld:say_hello",
+    ]
+  },
   url="https://github.com/steve1281/helloworld_package",
   author="Steven V Falcigno",
   author_email="steve1281@hotmail.com",
