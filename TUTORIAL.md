@@ -271,6 +271,38 @@ $ twine upload dist/<star>
 
 ```
 
+### Other things you can add
+
+#### Add an entry point
+```
+This will, after you re-run setup and re-install, create a helloworld script yu can run:
+
+  entry_points = {
+    "console_scripts" :[
+      "helloworld = helloworld:say_hello",
+    ]
+  },
+
+The script it creates for you is actually:
+$ . ./env/bin/activate
+$ which helloworld
+.../env/bin/helloworld
+
+And looks like:
+#!<path to install>/env/bin/python3
+# -*- coding: utf-8 -*-
+import re
+import sys
+
+from helloworld import say_hello
+
+if __name__ == '__main__':
+    sys.argv[0] = re.sub(r'(-script\.pyw?|\.exe)?$', '', sys.argv[0])
+    sys.exit(say_hello())
+
+```
+
+
 ### Productionize it
 
 #### Testing with tox
